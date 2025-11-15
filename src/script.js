@@ -3,14 +3,17 @@ const startButton = document.getElementById("startButton");
 const playAgainButton = document.getElementById("playAgainButton");
 const game = document.querySelector(".game"); // dont forget the . in front (class)
 let startTime;
+let greenShown = false;
+let greenTimeout;
 
+// measures user's reaction time
 function measureReactionTime() {
   const clickTime = Date.now();
   const reactionTime = clickTime - startTime;
   const output = document.querySelector(".reaction-output");
   output.textContent = `Your reaction time was ${reactionTime}ms.`;
 
-  // Remove listener so multiple clicks don't increase user's time
+  // remove listener so multiple clicks don't stack
   game.removeEventListener("click", measureReactionTime);
 
   // play again button + resetting game upon clicked
@@ -25,6 +28,7 @@ playAgainButton.addEventListener("click", () => {
   document.querySelector(".reaction-output").textContent = "";
 });
 
+// starting the game
 startButton.addEventListener("click", () => {
   elements.forEach(el => {
     el.style.display = "none";
