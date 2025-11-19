@@ -2,9 +2,10 @@ const elements = document.querySelectorAll(".hide-on-start");
 const startButton = document.getElementById("startButton");
 const playAgainButton = document.getElementById("playAgainButton");
 const game = document.querySelector(".game"); // dont forget the . in front (class)
+const tooSoonAlert = document.querySelector(".too-soon-alert");
+
 let startTime;
 let greenShown = false;
-let greenTimeout;
 
 // measures user's reaction time
 function measureReactionTime() {
@@ -26,20 +27,45 @@ playAgainButton.addEventListener("click", () => {
   elements.forEach(el => el.style.display = "block");
   game.style.backgroundColor = '';
   document.querySelector(".reaction-output").textContent = "";
+  greenShown = false;
 });
 
-// starting the game
-startButton.addEventListener("click", () => {
+  // starting the game
+function startGame() {
   elements.forEach(el => {
     el.style.display = "none";
   });
   game.style.backgroundColor = "red";
+  greenShown = false;
+  const randomDelay = Math.floor(Math.random() * 3000) + 2000;
 
-  const randomDelay = Math.floor(Math.random() * 3000) + 2000; // 2-5 seconds
-
-  setTimeout(() => {  
+  greenTimeout = setTimeout(() => {
     game.style.backgroundColor = "green";
-    startTime = Date.now(); 
+    startTime = Date.now();
     game.addEventListener("click", measureReactionTime);
+    greenShown = true;
   }, randomDelay);
-});
+}
+
+startButton.addEventListener("click", startGame);
+
+// too soon alert
+
+function tooSoon() {
+  if (!greenShown) {
+    tooSoonAlert.textContent = "you clicked too soon.. restarting the game";
+
+    game,removeEventListener("click", tooSoon);
+    game.removeEventListener("click", measureReactionTime);
+
+    // restart game after 2s
+
+    restartTimeout = setTimeout(() => {
+      elements.forEach(el => el.style.display = "block");
+      game.style.backgroundColor = '';
+      document.querySelector(".reaction-output").textContent = "";
+      tooSoonAlert.textContent = "";
+      greenShown = false;
+    }, 2000); 
+  }
+}
