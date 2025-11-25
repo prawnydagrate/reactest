@@ -1,4 +1,4 @@
-const elements = document.querySelectorAll(".hide-on-start");
+const hideElements = document.querySelectorAll(".hide-on-start");
 const startButton = document.getElementById("startButton");
 const playAgainButton = document.getElementById("playAgainButton");
 const game = document.querySelector(".game"); // dont forget the . in front (class)
@@ -6,6 +6,7 @@ const tooSoonAlert = document.querySelector(".too-soon-alert");
 
 let startTime;
 let greenShown = false;
+let greenTimeout;
 
 // measures user's reaction time
 function measureReactionTime() {
@@ -22,26 +23,29 @@ function measureReactionTime() {
 }
 
 // resetting the game
-playAgainButton.addEventListener("click", () => {
+function resetGame() {
   playAgainButton.style.display = "none";
-  elements.forEach(el => el.style.display = "block");
+  for (const el of hideElements) el.style.display = "block";
   game.style.backgroundColor = '';
   document.querySelector(".reaction-output").textContent = "";
   greenShown = false;
-});
+}
 
-  // starting the game
-function startGame() {
-  elements.forEach(el => {
-    el.style.display = "none";
-  });
+playAgainButton.addEventListener("click", resetGame);
+
+// starting the game
+function startGame(e) {
+  // stop event bubbling because start button is inside game div so a click of the start button is also a click of the game div
+  e.stopPropagation();
   game.style.backgroundColor = "red";
   greenShown = false;
   const randomDelay = Math.floor(Math.random() * 3000) + 2000;
-
+  game.addEventListener("click", tooSoon);
+  for (const el of hideElements) el.style.display = "none";
   greenTimeout = setTimeout(() => {
     game.style.backgroundColor = "green";
     startTime = Date.now();
+    game.removeEventListener("click", tooSoon);
     game.addEventListener("click", measureReactionTime);
     greenShown = true;
   }, randomDelay);
@@ -50,22 +54,18 @@ function startGame() {
 startButton.addEventListener("click", startGame);
 
 // too soon alert
-
 function tooSoon() {
   if (!greenShown) {
+    clearTimeout(greenTimeout);
     tooSoonAlert.textContent = "you clicked too soon.. restarting the game";
 
-    game,removeEventListener("click", tooSoon);
+    game.removeEventListener("click", tooSoon);
     game.removeEventListener("click", measureReactionTime);
 
-    // restart game after 2s
-
+    // restart game after 1.4s
     restartTimeout = setTimeout(() => {
-      elements.forEach(el => el.style.display = "block");
-      game.style.backgroundColor = '';
-      document.querySelector(".reaction-output").textContent = "";
+      resetGame();
       tooSoonAlert.textContent = "";
-      greenShown = false;
-    }, 2000); 
+    }, 1400);
   }
 }
