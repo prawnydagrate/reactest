@@ -3,6 +3,7 @@ const startButton = document.getElementById("startButton");
 const playAgainButton = document.getElementById("playAgainButton");
 const game = document.querySelector(".game"); // dont forget the . in front (class)
 const tooSoonAlert = document.querySelector(".too-soon-alert");
+const darkModeBtn = document.getElementById("darkModeButton")
 
 let startTime;
 let greenShown = false;
@@ -69,3 +70,16 @@ function tooSoon() {
     }, 1400);
   }
 }
+
+// dark-light mode toggling
+
+darkModeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  // basically, if user changed to dark mode, button text changes to light mode, else, text stays as dark mode.
+  if (document.body.classList.contains("dark")) {
+    darkModeBtn.textContent = "light mode";
+  } else {
+    darkModeBtn.textContent = "dark mode";
+  }
+});

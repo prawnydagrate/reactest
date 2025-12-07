@@ -1,22 +1,37 @@
+:root {
+    --bg: white;
+    --text: black;
+    --panel: #f0f0f0;
+}
+
+.dark {
+    --bg: #111;
+    --text: #eee;
+    --panel: #1b1b1b;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     height: 100%;
     overflow: hidden; /* prevents scrolling, so the webpage seems to fill up more. */
+    font-family: "Orbitron", sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh; /* IMPORTANT: means height is set to full viewport height (100vh) */
-    width: 100vw; /* note that vw and vh are basically the same thing. */
+    height: 100%;
+    width: 100%;
     border: 2px solid black;
     margin: 0 auto;
 }
 
 header {
-    background-color: black;
-    color: white;
+    background-color: var(--text);
+    color: var(--bg);
     text-align: center;
     padding: 20px;
     font-size: 30px;
@@ -24,10 +39,29 @@ header {
     line-height: 40px;
 }
 
+/* rt-list is for reaction time categories found in the html */
+
+.rt-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rt-list li {
+    display: flex;
+    justify-content: space-between;
+    width: 260px;   
+    margin-bottom: 8px;
+    font-family: "Orbitron", sans-serif;
+    font-weight: bold;
+}
+
+
 .content {
     display: flex;
     flex-direction: row;
-    height: 640px; /* essentially, this is (720-80)px header */
+    height: 100%;
+    width: 100%;
 }
 
 .instructions {
@@ -36,6 +70,7 @@ header {
     padding: 20px;
     border-right: 2px solid black;
     box-sizing: border-box;
+    background-color: var(--panel);
 }
 
 #startButton {
@@ -63,7 +98,8 @@ header {
 }
 
 .game {
-    width: 880px; /* total 1280px - 400px */
+    width: 100%;
+    height: 100%;
     background-color: #fafafa;
     display: flex;
     flex-direction: column; /* stack text above button */
@@ -74,6 +110,8 @@ header {
     box-sizing: border-box;
     position: relative;
     transition: all 0.1s linear;
+    font-family: "Orbitron", sans-serif;
+    background-color: var(--panel);
 }
 
 #playAgainButton {
@@ -88,6 +126,7 @@ header {
     border-image: linear-gradient(to right, rgb(122, 244, 94), rgb(24, 72, 2)) 1;
     cursor: pointer;
     margin-top: 200px;
+    font-family: "Orbitron", sans-serif;
 }
 
 .reaction-output {
